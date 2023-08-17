@@ -1,0 +1,29 @@
+{
+    "name": "modemkiller",
+    "author": "椽承设计",
+    "url": "https://github.com/leolee9086/modemkiller",
+    "version": "0.0.1",
+    "displayName": {
+      "default": "modemkiller",
+      "zh_CN": "多图导出"
+    },
+    "description": {
+      "default": "this is a plugin to export multi image 1 time",
+      "zh_CN": "这是一个用于一次导出多张图片的插件"
+    },
+    "readme": {
+      "default": "README.md",
+      "en_US": "README_en_US.md",
+      "zh_CN": "README.md"
+    },
+    "i18n": [
+      "en_US",
+      "zh_CN"
+    ],
+    "funding": {
+      "custom": [
+        "https://afdian.net/a/leolee9086"
+      ]
+    }
+  }
+  
