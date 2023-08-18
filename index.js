@@ -90,6 +90,18 @@ const hasNextSibling = (element) => {
     }
     return false;
 };
+const hasPreviousSibling = (element) => {
+    let previousSibling = element.previousSibling;
+    while (previousSibling) {
+        if (previousSibling.textContent === "" && previousSibling.nodeType === 3) {
+            previousSibling = previousSibling.previousSibling;
+        } else {
+            return previousSibling;
+        }
+    }
+    return false;
+};
+
 const hasClosestBlock = (element) => {
     const nodeElement = hasClosestByAttribute(element, "data-node-id", null);
     if (nodeElement && nodeElement.tagName !== "BUTTON" && nodeElement.getAttribute("data-type")?.startsWith("Node")) {
