@@ -1344,6 +1344,7 @@ class modemkiller extends Plugin {
             btnsElement[0].removeAttribute("disabled");
             btnsElement[1].removeAttribute("disabled");
             let bgLayer = document.getElementById('bglayer');
+
             if (bgLayer) {
                 previewElement.style.backgroundColor = 'transparent'
                 exportBgLayer.style.setProperty('background-image', bgLayer.style.backgroundImage)
@@ -1351,9 +1352,8 @@ class modemkiller extends Plugin {
                 exportBgLayer.style.setProperty('background-attachment', 'fixed')
                 exportBgLayer.style.setProperty('background-size', 'cover')
                 exportBgLayer.style.setProperty('opacity', '30%')
-                exportBgLayer.style.setProperty('top', '0px')
-                exportBgLayer.style.setProperty('left', '0px')
-                exportBgLayer.style.setProperty('z-index', '0')
+            }else{
+                exportBgLayer.style.display='none'
             }
             exportDialog.element.querySelector(".fn__loading").remove();
         };
