@@ -79,7 +79,17 @@ const genIconHTML = () => {
 </div>`;
 };
 
-
+const hasNextSibling = (element) => {
+    let nextSibling = element.nextSibling;
+    while (nextSibling) {
+        if (nextSibling.textContent === "" && nextSibling.nodeType === 3) {
+            nextSibling = nextSibling.nextSibling;
+        } else {
+            return nextSibling;
+        }
+    }
+    return false;
+};
 const hasClosestBlock = (element) => {
     const nodeElement = hasClosestByAttribute(element, "data-node-id", null);
     if (nodeElement && nodeElement.tagName !== "BUTTON" && nodeElement.getAttribute("data-type")?.startsWith("Node")) {
@@ -119,7 +129,9 @@ const hasTopClosestByClassName = (element, className, top = false) => {
     }
     return closest || false;
 };
-
+const looseJsonParse = (text) => {
+    return Function(`"use strict";return (${text})`)();
+};
 const hasClosestByAttribute = (element, attr, value, top = false) => {
     if (!element) {
         return false;
@@ -934,23 +946,30 @@ class modemkiller extends Plugin {
         const exportDialog = new Dialog({
             title: window.siyuan.languages.exportAsImage,
             content: `<div class="b3-dialog__content" style="${this.isMobile ? "padding:8px;" : ""};background-color: var(--b3-theme-background)">
-            <canvas id="export-bglayer" class="bglayer" style="background-image: url(&quot;/public/siyuan-plugin-background-cover/assets/images/hash-6130f530e783c70.png&quot;); filter: blur(0px); background-position: 50% 50%;"></canvas>        <div style="${this.isMobile ? "padding: 16px;margin: 16px 0" : "padding: 48px;margin: 8px 0 8px"};border: 1px solid var(--b3-border-color);border-radius: var(--b3-border-radius-b);" class="export-img protyle-wysiwyg${window.siyuan.config.editor.displayBookmarkIcon ? " protyle-wysiwyg--attr" : ""}" id="preview"></div>
+            <canvas id="export-bglayer" class="bglayer" style="background-image: url(&quot;/public/siyuan-plugin-background-cover/assets/images/hash-6130f530e783c70.png&quot;); filter: blur(0px); background-position: 50% 50%;overflow:hidden"></canvas>       
+            <div 
+                style="${this.isMobile ? "padding: 16px;margin: 16px 0" : "padding: 48px;margin: 8px 0 8px"};
+                        border: 1px solid var(--b3-border-color);
+                        border-radius: var(--b3-border-radius-b);
+                        max-height:calc(100% - 48px);overflow:auto" 
+                        class="export-img export-img-multi protyle-wysiwyg${window.siyuan.config.editor.displayBookmarkIcon ? " protyle-wysiwyg--attr" : ""}" id="preview">
+                    </div>
             <div class="config-about__logo fn__flex" style="z-index:1">
             <div>
-            <img src="/stage/icon.png">
-            <span>${this.i18n.思源笔记}</span>
-            <span class="fn__space"></span>
-            <span class="ft__on-surface">${this.i18n.重构你的思维}</span>
+                <img src="/stage/icon.png">
+                <span>${this.i18n.思源笔记}</span>
+                <span class="fn__space"></span>
+                <span class="ft__on-surface">${this.i18n.重构你的思维}</span>
             </div>
             <div class='fn__space fn__flex-1' style='text-align:center;color:transparent'>
-            知行合一&nbsp;经世致用
+             知行合一&nbsp;经世致用
             </div>
-            <div>
-            <span class="ft__on-surface">${this.i18n.匠造为常}</span>
-            <span class="fn__space"></span>
-            <span>${this.i18n.椽承设计}</span>
-            <img src="/plugins/modemkiller/logo.png">
-            </div> 
+                <div>
+                    <span class="ft__on-surface">${this.i18n.匠造为常}</span>
+                    <span class="fn__space"></span>
+                    <span>${this.i18n.椽承设计}</span>
+                    <img src="/plugins/modemkiller/logo.png">
+                </div> 
             </div>
         </div>
             <div class="fn__hr--b"></div>
@@ -996,18 +1015,16 @@ class modemkiller extends Plugin {
             const [widthRatio, heightRatio] = selectedRatio.split("/");
             const RatioValue =parseInt(heightRatio) / parseInt(widthRatio)
             const width = previewElement.parentElement.clientWidth;
-
             const height = width * RatioValue;
-        
             const innerWidth = previewElement.clientWidth
             const innerHeight =Math.min(innerWidth * RatioValue,height-60);
             (exportDialog.element.querySelector(".b3-dialog__container")).style.height = "";
             previewElement.parentElement.style.height = height + 'px'
             previewElement.parentElement.style.maxHeight = height + 'px'
-            previewElement.parentElement.style.overflow = 'hidden'
+            //previewElement.parentElement.style.overflow = 'hidden'
             previewElement.style.height = innerHeight + 'px'
             previewElement.style.maxHeight = innerHeight + 'px'
-            previewElement.style.overflow = 'scroll'
+            //previewElement.style.overflow = 'scroll'
             let lastVisibleElement
             //setStorageVal('local-exportimg', window.siyuan.storage['local-exportimg']);
             setTimeout(async () => {
@@ -1047,7 +1064,7 @@ class modemkiller extends Plugin {
                         await blobPromise()
 
                     }
-                    exportDialog.destroy();
+                    //exportDialog.destroy();
                     /* window.html2canvas(previewElement.parentElement, {useCORS: true}).then((canvas) => {
                          canvas.toBlob((blob) => {
                              const formData = new FormData();

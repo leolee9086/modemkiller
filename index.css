@@ -1,0 +1,6 @@
+.export-img-multi [data-node-id].render-node{
+    min-height: fit-content;
+}
+.export-img-multi   [data-subtype=mermaid]{
+    overflow: visible;
+}
