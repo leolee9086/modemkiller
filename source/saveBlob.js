@@ -1,5 +1,8 @@
 import { openByMobile } from "./util/fromSiyuan.js";
 import { clientApi } from "./asyncModule.js";
+export const saveCanvas=async(canvas,fileName)=>{
+    return await canvasSaveBlobPromise(canvas,fileName)
+}
 export const canvasSaveBlobPromise = (canvas,fileName) => {
     return new Promise((resolve, reject) => {
         canvas.toBlob((blob) => {

@@ -5,7 +5,7 @@ import {
     highlightRender,
     openByMobile
 } from './util/fromSiyuan.js'
-import {canvasSaveBlobPromise} from './saveBlob.js'
+import {saveCanvas} from './saveBlob.js'
 const 显示导出对话框=(protyle)=> {
     let { Dialog, fetchPost } = clientApi
     let { id } = protyle.block
@@ -96,26 +96,7 @@ const 显示导出对话框=(protyle)=> {
                             height: previewElement.parentElement.clientHeight,
                             useCORS: true
                         })
-                        const blobPromise = () => {
-                            return new Promise((resolve, reject) => {
-                                canvas.toBlob((blob) => {
-                                    try {
-                                        const formData = new FormData();
-                                        formData.append("file", blob, btnsElement[1].getAttribute("data-title") + 0 + ".png");
-                                        formData.append("type", "image/png");
-                                        fetchPost("/api/export/exportAsFile", formData, (response) => {
-                                            openByMobile(response.data.file);
-                                        });
-                                        resolve(true)
-                                    } catch (e) {
-                                        reject(e)
-                                    }
-                                })
-
-                            })
-
-                        }
-                        await blobPromise()
+                        await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
                         for (let i = 0; i < separatorElements.length; i++) {
                             const separator = separatorElements[i];
                             const nextSeparator = separatorElements[i + 1];
@@ -135,26 +116,7 @@ const 显示导出对话框=(protyle)=> {
                                 height: previewElement.parentElement.clientHeight,
                                 useCORS: true
                             })
-                            const blobPromise = () => {
-                                return new Promise((resolve, reject) => {
-                                    canvas.toBlob((blob) => {
-                                        try {
-                                            const formData = new FormData();
-                                            formData.append("file", blob, btnsElement[1].getAttribute("data-title") + i + 1 + ".png");
-                                            formData.append("type", "image/png");
-                                            fetchPost("/api/export/exportAsFile", formData, (response) => {
-                                                openByMobile(response.data.file);
-                                            });
-                                            resolve(true)
-                                        } catch (e) {
-                                            reject(e)
-                                        }
-                                    })
-
-                                })
-
-                            }
-                            await blobPromise()
+                            await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + i+1+ ".png")
                         }
                     } else {
                         previewElement.scrollTo({ top: 0 });
@@ -165,26 +127,7 @@ const 显示导出对话框=(protyle)=> {
                             height: previewElement.parentElement.clientHeight,
                             useCORS: true
                         })
-                        const blobPromise = () => {
-                            return new Promise((resolve, reject) => {
-                                canvas.toBlob((blob) => {
-                                    try {
-                                        const formData = new FormData();
-                                        formData.append("file", blob, btnsElement[1].getAttribute("data-title") + 0 + ".png");
-                                        formData.append("type", "image/png");
-                                        fetchPost("/api/export/exportAsFile", formData, (response) => {
-                                            openByMobile(response.data.file);
-                                        });
-                                        resolve(true)
-                                    } catch (e) {
-                                        reject(e)
-                                    }
-                                })
-
-                            })
-                        }
-                        await blobPromise()
-
+                        await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + 0+ ".png")
                     }
                 });
             }, 500);
@@ -212,7 +155,7 @@ const 显示导出对话框=(protyle)=> {
                             height: previewElement.parentElement.clientHeight,
                             useCORS: true
                         })
-                        await canvasSaveBlobPromise(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
+                        await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
                        
 
                         for (let i = 0; i < separatorElements.length; i++) {
@@ -236,7 +179,7 @@ const 显示导出对话框=(protyle)=> {
                                 height: previewElement.parentElement.clientHeight,
                                 useCORS: true
                             })
-                            await canvasSaveBlobPromise(canvas,btnsElement[1].getAttribute("data-title") + i + 1 + ".png")
+                            await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + i + 1 + ".png")
                         }
                     } else {
                         previewElement.scrollTo({ top: 0 });
@@ -247,7 +190,7 @@ const 显示导出对话框=(protyle)=> {
                             height: previewElement.parentElement.clientHeight,
                             useCORS: true
                         })
-                        await canvasSaveBlobPromise(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
+                        await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
                     }
                 });
             }, 500);
@@ -279,26 +222,7 @@ const 显示导出对话框=(protyle)=> {
                             height: height,
                             useCORS: true
                         })
-                        const blobPromise = () => {
-                            return new Promise((resolve, reject) => {
-                                canvas.toBlob((blob) => {
-                                    try {
-                                        const formData = new FormData();
-                                        formData.append("file", blob, btnsElement[1].getAttribute("data-title") + i + ".png");
-                                        formData.append("type", "image/png");
-                                        fetchPost("/api/export/exportAsFile", formData, (response) => {
-                                            openByMobile(response.data.file);
-                                        });
-                                        resolve(true)
-                                    } catch (e) {
-                                        reject(e)
-                                    }
-                                })
-
-                            })
-
-                        }
-                        await blobPromise()
+                        await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + i+ ".png")
                     }
                 });
             }, 500);
