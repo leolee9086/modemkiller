@@ -11,7 +11,7 @@ const 显示导出对话框=(protyle)=> {
     let { id } = protyle.block
     const frontEnd = clientApi.getFrontend();
     plugin.isMobile = frontEnd === "mobile" || frontEnd === "browser-mobile";
-    const exportDialog = new Dialog({
+    const 导出对话框 = new Dialog({
         title: window.siyuan.languages.exportAsImage,
         content: `<div class="b3-dialog__content" style="${plugin.isMobile ? "padding:8px;" : ""};background-color: var(--b3-theme-background)">
         <canvas id="export-bglayer" class="bglayer" style="background-image: url(&quot;/public/siyuan-plugin-background-cover/assets/images/hash-6130f530e783c70.png&quot;); filter: blur(0px); background-position: 50% 50%;overflow:hidden"></canvas>       
@@ -72,17 +72,19 @@ const 显示导出对话框=(protyle)=> {
         width: plugin.isMobile ? "92vw" : "990px",
         height: "70vh"
     });
-    const ratioSelect = exportDialog.element.querySelector("#ratio");
-    const btnsElement = exportDialog.element.querySelectorAll(".b3-button");
-    btnsElement[0].addEventListener("click", () => {
-        exportDialog.destroy();
+    const 导出比例选择器 = 导出对话框.element.querySelector("#ratio");
+    const 按钮元素数组 = 导出对话框.element.querySelectorAll(".b3-button");
+    const 取消按钮 = 按钮元素数组[0]
+    const 确定按钮 = 确定按钮
+    取消按钮.addEventListener("click", () => {
+        导出对话框.destroy();
     });
-    btnsElement[1].addEventListener("click", () => {
-        const selectedRatio = ratioSelect.value;
+    确定按钮.addEventListener("click", () => {
+        const selectedRatio = 导出比例选择器.value;
         //按照分割线导出
         if (selectedRatio == '按分割线') {
             setTimeout(async () => {
-                (exportDialog.element.querySelector(".b3-dialog__container")).style.height = "";
+                (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
                 addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas").then(async () => {
                     //按照分割线导出
                     previewElement.parentElement.style.maxHeight = ""
@@ -96,7 +98,7 @@ const 显示导出对话框=(protyle)=> {
                             height: previewElement.parentElement.clientHeight,
                             useCORS: true
                         })
-                        await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
+                        await saveCanvas(canvas,确定按钮.getAttribute("data-title") + 0 + ".png")
                         for (let i = 0; i < separatorElements.length; i++) {
                             const separator = separatorElements[i];
                             const nextSeparator = separatorElements[i + 1];
@@ -116,7 +118,7 @@ const 显示导出对话框=(protyle)=> {
                                 height: previewElement.parentElement.clientHeight,
                                 useCORS: true
                             })
-                            await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + i+1+ ".png")
+                            await saveCanvas(canvas,确定按钮.getAttribute("data-title") + i+1+ ".png")
                         }
                     } else {
                         previewElement.scrollTo({ top: 0 });
@@ -127,14 +129,14 @@ const 显示导出对话框=(protyle)=> {
                             height: previewElement.parentElement.clientHeight,
                             useCORS: true
                         })
-                        await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + 0+ ".png")
+                        await saveCanvas(canvas,确定按钮.getAttribute("data-title") + 0+ ".png")
                     }
                 });
             }, 500);
         }
         else if (selectedRatio == '按大纲最高级') {
             setTimeout(async () => {
-                (exportDialog.element.querySelector(".b3-dialog__container")).style.height = "";
+                (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
                 addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas").then(async () => {
                     //按照分割线导出
                     previewElement.parentElement.style.maxHeight = ""
@@ -155,7 +157,7 @@ const 显示导出对话框=(protyle)=> {
                             height: previewElement.parentElement.clientHeight,
                             useCORS: true
                         })
-                        await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
+                        await saveCanvas(canvas,确定按钮.getAttribute("data-title") + 0 + ".png")
                        
 
                         for (let i = 0; i < separatorElements.length; i++) {
@@ -179,7 +181,7 @@ const 显示导出对话框=(protyle)=> {
                                 height: previewElement.parentElement.clientHeight,
                                 useCORS: true
                             })
-                            await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + i + 1 + ".png")
+                            await saveCanvas(canvas,确定按钮.getAttribute("data-title") + i + 1 + ".png")
                         }
                     } else {
                         previewElement.scrollTo({ top: 0 });
@@ -190,7 +192,7 @@ const 显示导出对话框=(protyle)=> {
                             height: previewElement.parentElement.clientHeight,
                             useCORS: true
                         })
-                        await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
+                        await saveCanvas(canvas,确定按钮.getAttribute("data-title") + 0 + ".png")
                     }
                 });
             }, 500);
@@ -203,7 +205,7 @@ const 显示导出对话框=(protyle)=> {
             const height = width * RatioValue;
             const innerWidth = previewElement.clientWidth
             const innerHeight = Math.min(innerWidth * RatioValue, height - 60);
-            (exportDialog.element.querySelector(".b3-dialog__container")).style.height = "";
+            (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
             previewElement.parentElement.style.height = height + 'px'
             previewElement.parentElement.style.maxHeight = height + 'px'
             previewElement.style.height = innerHeight + 'px'
@@ -222,21 +224,21 @@ const 显示导出对话框=(protyle)=> {
                             height: height,
                             useCORS: true
                         })
-                        await saveCanvas(canvas,btnsElement[1].getAttribute("data-title") + i+ ".png")
+                        await saveCanvas(canvas,确定按钮.getAttribute("data-title") + i+ ".png")
                     }
                 });
             }, 500);
         }
 
     });
-    const previewElement = exportDialog.element.querySelector("#preview");
-    const exportBgLayer = exportDialog.element.querySelector("#export-bglayer");
+    const previewElement = 导出对话框.element.querySelector("#preview");
+    const exportBgLayer = 导出对话框.element.querySelector("#export-bglayer");
 
-    const foldElement = (exportDialog.element.querySelector("#keepFold"));
+    const foldElement = (导出对话框.element.querySelector("#keepFold"));
     foldElement.addEventListener("change", () => {
-        btnsElement[0].setAttribute("disabled", "disabled");
-        btnsElement[1].setAttribute("disabled", "disabled");
-        btnsElement[1].parentElement.insertAdjacentHTML("afterend", '<div class="fn__loading"><img height="128px" width="128px" src="stage/loading-pure.svg"></div>');
+        按钮元素数组[0].setAttribute("disabled", "disabled");
+        确定按钮.setAttribute("disabled", "disabled");
+        确定按钮.parentElement.insertAdjacentHTML("afterend", '<div class="fn__loading"><img height="128px" width="128px" src="stage/loading-pure.svg"></div>');
         window.siyuan.storage['local-exportimg'].keepFold = foldElement.checked;
         fetchPost("/api/export/exportPreviewHTML", {
             id,
@@ -266,8 +268,8 @@ const 显示导出对话框=(protyle)=> {
             item.setAttribute("viewBox", viewBox);
             item.innerHTML = symbolElements[symbolElements.length - 1].innerHTML;
         });
-        btnsElement[0].removeAttribute("disabled");
-        btnsElement[1].removeAttribute("disabled");
+        按钮元素数组[0].removeAttribute("disabled");
+        确定按钮.removeAttribute("disabled");
         let bgLayer = document.getElementById('bglayer');
         if (bgLayer) {
             previewElement.style.backgroundColor = 'transparent'
@@ -283,7 +285,7 @@ const 显示导出对话框=(protyle)=> {
         else {
             exportBgLayer.style.display = 'none'
         }
-        exportDialog.element.querySelector(".fn__loading").remove();
+        导出对话框.element.querySelector(".fn__loading").remove();
     };
     fetchPost("/api/export/exportPreviewHTML", {
         id,
@@ -291,7 +293,7 @@ const 显示导出对话框=(protyle)=> {
         image: true,
     }, (response) => {
         refreshPreview(response);
-        btnsElement[1].setAttribute("data-title", response.data.name);
+        确定按钮.setAttribute("data-title", response.data.name);
     });
 }
 plugin.eventBus.on('显示导出对话框',(e)=>{
