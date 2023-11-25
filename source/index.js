@@ -96,6 +96,23 @@ const 显示导出对话框 = (protyle) => {
         previewElement.innerHTML = response.data.content;
         processRender(previewElement);
         highlightRender(previewElement);
+        //https://github.com/siyuan-note/siyuan/commit/fffc5a56e8ec67a1985ced3bee164cd5cd324670
+        previewElement.querySelectorAll('[data-type~="mark"]').forEach((markItem) => {
+            markItem.childNodes.forEach((item) => {
+                let spanHTML = ""
+                Array.from(item.textContent).forEach(str => {
+                    spanHTML += `<span data-type="mark">${str}</span>`
+                })
+                const templateElement = document.createElement("template");
+                templateElement.innerHTML = spanHTML;
+                item.after(templateElement.content);
+                item.remove();
+            })
+            if (markItem.childNodes.length > 0) {
+                markItem.setAttribute("data-type", markItem.getAttribute("data-type").replace("mark", ""))
+            }
+        });
+
         previewElement.querySelectorAll("table").forEach((item) => {
             if (item.clientWidth > item.parentElement.clientWidth) {
                 item.setAttribute("style", `margin-bottom:${item.parentElement.clientWidth * item.clientHeight / item.clientWidth - item.parentElement.clientHeight + 1}px;transform: scale(${item.parentElement.clientWidth / item.clientWidth});transform-origin: top left;`);
