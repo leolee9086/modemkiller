@@ -80,9 +80,9 @@ const 显示导出对话框=(protyle)=> {
         导出对话框.destroy();
     });
     确定按钮.addEventListener("click", () => {
-        const selectedRatio = 导出比例选择器.value;
+        const 当前导出比例模式 = 导出比例选择器.value;
         //按照分割线导出
-        if (selectedRatio == '按分割线') {
+        if (当前导出比例模式 == '按分割线') {
             setTimeout(async () => {
                 (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
                 addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas").then(async () => {
@@ -134,7 +134,7 @@ const 显示导出对话框=(protyle)=> {
                 });
             }, 500);
         }
-        else if (selectedRatio == '按大纲最高级') {
+        else if (当前导出比例模式 == '按大纲最高级') {
             setTimeout(async () => {
                 (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
                 addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas").then(async () => {
@@ -197,9 +197,9 @@ const 显示导出对话框=(protyle)=> {
                 });
             }, 500);
         }
-        else if (selectedRatio.indexOf('/') > 0) {
+        else if (当前导出比例模式.indexOf('/') > 0) {
             //按照宽高比导出
-            const [widthRatio, heightRatio] = selectedRatio.split("/");
+            const [widthRatio, heightRatio] = 当前导出比例模式.split("/");
             const RatioValue = parseInt(heightRatio) / parseInt(widthRatio)
             const width = previewElement.parentElement.clientWidth;
             const height = width * RatioValue;
