@@ -247,27 +247,7 @@ const 显示导出对话框=(protyle)=> {
                             height: previewElement.parentElement.clientHeight,
                             useCORS: true
                         })
-                        const blobPromise = () => {
-                            return new Promise((resolve, reject) => {
-                                canvas.toBlob((blob) => {
-                                    try {
-                                        const formData = new FormData();
-                                        formData.append("file", blob, btnsElement[1].getAttribute("data-title") + 0 + ".png");
-                                        formData.append("type", "image/png");
-                                        fetchPost("/api/export/exportAsFile", formData, (response) => {
-                                            openByMobile(response.data.file);
-                                        });
-                                        resolve(true)
-                                    } catch (e) {
-                                        reject(e)
-                                    }
-                                })
-
-                            })
-
-                        }
-                        await blobPromise()
-
+                        await canvasSaveBlobPromise(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
                     }
                 });
             }, 500);
