@@ -1,7 +1,10 @@
-import { openByMobile } from "./util/fromSiyuan.js";
 import { clientApi } from "./asyncModule.js";
-export const saveCanvas=async(canvas,fileName)=>{
-    return await canvasSaveBlobPromise(canvas,fileName)
+export const saveCanvas=async(canvas,fileName,callBack)=>{
+    const data= await canvasSaveBlobPromise(canvas,fileName)
+    if(callBack){
+        callBack(data)
+    }
+    return data
 }
 export const canvasSaveBlobPromise = (canvas,fileName) => {
     return new Promise((resolve, reject) => {
@@ -11,9 +14,8 @@ export const canvasSaveBlobPromise = (canvas,fileName) => {
                 formData.append("file", blob, fileName );
                 formData.append("type", "image/png");
                 clientApi.fetchPost("/api/export/exportAsFile", formData, (response) => {
-                    openByMobile(response.data.file);
+                    resolve(response.data.file)
                 });
-                resolve(true)
             } catch (e) {
                 reject(e)
             }

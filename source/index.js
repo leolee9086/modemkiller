@@ -1,12 +1,12 @@
-import { plugin,clientApi } from "./asyncModule.js";
+import { plugin, clientApi } from "./asyncModule.js";
 import {
     addScript,
     processRender,
     highlightRender,
     openByMobile
 } from './util/fromSiyuan.js'
-import {saveCanvas} from './saveBlob.js'
-const 显示导出对话框=(protyle)=> {
+import { saveCanvas } from './saveBlob.js'
+const 显示导出对话框 = (protyle) => {
     let { Dialog, fetchPost } = clientApi
     let { id } = protyle.block
     const frontEnd = clientApi.getFrontend();
@@ -75,165 +75,9 @@ const 显示导出对话框=(protyle)=> {
     const 导出比例选择器 = 导出对话框.element.querySelector("#ratio");
     const 按钮元素数组 = 导出对话框.element.querySelectorAll(".b3-button");
     const 取消按钮 = 按钮元素数组[0]
-    const 确定按钮 = 确定按钮
-    取消按钮.addEventListener("click", () => {
-        导出对话框.destroy();
-    });
-    确定按钮.addEventListener("click", () => {
-        const 当前导出比例模式 = 导出比例选择器.value;
-        //按照分割线导出
-        if (当前导出比例模式 == '按分割线') {
-            setTimeout(async () => {
-                (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
-                addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas").then(async () => {
-                    //按照分割线导出
-                    previewElement.parentElement.style.maxHeight = ""
-                    let separatorElements = previewElement.querySelectorAll(':scope > .hr');
-                    if (separatorElements[0]) {
-                        previewElement.scrollTo({ top: 0 });
-                        previewElement.style.maxHeight = separatorElements[0].offsetTop - parseInt(getComputedStyle(previewElement).paddingBottom) + 'px'
-                        previewElement.style.height = separatorElements[0].offsetTop + 'px'
-                        let canvas = await html2canvas(previewElement.parentElement, {
-                            width: previewElement.parentElement.clientWidth,
-                            height: previewElement.parentElement.clientHeight,
-                            useCORS: true
-                        })
-                        await saveCanvas(canvas,确定按钮.getAttribute("data-title") + 0 + ".png")
-                        for (let i = 0; i < separatorElements.length; i++) {
-                            const separator = separatorElements[i];
-                            const nextSeparator = separatorElements[i + 1];
-                            if (nextSeparator) {
-                                let h = nextSeparator.offsetTop - separator.offsetTop - separator.offsetHeight
-                                previewElement.style.height = h + 'px'
-
-                                previewElement.style.maxHeight = h + 'px'
-                            } else {
-                                let h = previewElement.scrollHeight - separator.offsetTop - separator.offsetHeight
-                                previewElement.style.height = h + 'px'
-                                previewElement.style.maxHeight = h + 'px'
-                            }
-                            separator.nextElementSibling.scrollIntoView()
-                            let canvas = await html2canvas(previewElement.parentElement, {
-                                width: previewElement.parentElement.clientWidth,
-                                height: previewElement.parentElement.clientHeight,
-                                useCORS: true
-                            })
-                            await saveCanvas(canvas,确定按钮.getAttribute("data-title") + i+1+ ".png")
-                        }
-                    } else {
-                        previewElement.scrollTo({ top: 0 });
-                        previewElement.style.maxHeight = previewElement.scrollHeight + 'px'
-                        previewElement.style.height = previewElement.scrollHeight + 'px'
-                        let canvas = await html2canvas(previewElement.parentElement, {
-                            width: previewElement.parentElement.clientWidth,
-                            height: previewElement.parentElement.clientHeight,
-                            useCORS: true
-                        })
-                        await saveCanvas(canvas,确定按钮.getAttribute("data-title") + 0+ ".png")
-                    }
-                });
-            }, 500);
-        }
-        else if (当前导出比例模式 == '按大纲最高级') {
-            setTimeout(async () => {
-                (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
-                addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas").then(async () => {
-                    //按照分割线导出
-                    previewElement.parentElement.style.maxHeight = ""
-                    let selector = 'r'
-                    let separatorElements = []
-                    for (let i = 1; i < 6; i++) {
-                        selector = `:scope > [data-subtype="h${i}"]`
-                        if (previewElement.querySelectorAll(selector) && !separatorElements[0]) {
-                            separatorElements = previewElement.querySelectorAll(selector);
-                        }
-                    }
-                    if (separatorElements[0]) {
-                        previewElement.scrollTo({ top: 0 });
-                        previewElement.style.maxHeight = separatorElements[0].offsetTop - parseInt(getComputedStyle(previewElement).paddingBottom) + 'px'
-                        previewElement.style.height = separatorElements[0].offsetTop - parseInt(getComputedStyle(previewElement).paddingBottom) + 'px'
-                        let canvas = await html2canvas(previewElement.parentElement, {
-                            width: previewElement.parentElement.clientWidth,
-                            height: previewElement.parentElement.clientHeight,
-                            useCORS: true
-                        })
-                        await saveCanvas(canvas,确定按钮.getAttribute("data-title") + 0 + ".png")
-                       
-
-                        for (let i = 0; i < separatorElements.length; i++) {
-                            const separator = separatorElements[i];
-                            const nextSeparator = separatorElements[i + 1];
-                            if (nextSeparator) {
-                                let h = nextSeparator.offsetTop - separator.offsetTop
-                                console.log(h, i)
-                                previewElement.style.height = h + 'px'
-                                previewElement.style.maxHeight = h + 'px'
-                            } else {
-                                let h = previewElement.scrollHeight - separator.offsetTop
-                                console.log(h, i)
-                                previewElement.style.height = h + 'px'
-                                previewElement.style.maxHeight = h + 'px'
-                            }
-                            separator.scrollIntoView()
-
-                            let canvas = await html2canvas(previewElement.parentElement, {
-                                width: previewElement.parentElement.clientWidth,
-                                height: previewElement.parentElement.clientHeight,
-                                useCORS: true
-                            })
-                            await saveCanvas(canvas,确定按钮.getAttribute("data-title") + i + 1 + ".png")
-                        }
-                    } else {
-                        previewElement.scrollTo({ top: 0 });
-                        previewElement.style.maxHeight = previewElement.scrollHeight + 'px'
-                        previewElement.style.height = previewElement.scrollHeight + 'px'
-                        let canvas = await html2canvas(previewElement.parentElement, {
-                            width: previewElement.parentElement.clientWidth,
-                            height: previewElement.parentElement.clientHeight,
-                            useCORS: true
-                        })
-                        await saveCanvas(canvas,确定按钮.getAttribute("data-title") + 0 + ".png")
-                    }
-                });
-            }, 500);
-        }
-        else if (当前导出比例模式.indexOf('/') > 0) {
-            //按照宽高比导出
-            const [widthRatio, heightRatio] = 当前导出比例模式.split("/");
-            const RatioValue = parseInt(heightRatio) / parseInt(widthRatio)
-            const width = previewElement.parentElement.clientWidth;
-            const height = width * RatioValue;
-            const innerWidth = previewElement.clientWidth
-            const innerHeight = Math.min(innerWidth * RatioValue, height - 60);
-            (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
-            previewElement.parentElement.style.height = height + 'px'
-            previewElement.parentElement.style.maxHeight = height + 'px'
-            previewElement.style.height = innerHeight + 'px'
-            previewElement.style.maxHeight = innerHeight + 'px'
-            setTimeout(async () => {
-                addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas").then(async () => {
-                    //按照宽高比导出
-                    const totalHeight = previewElement.scrollHeight;  // HTML内容的总高度
-                    const numImages = Math.ceil(totalHeight / innerHeight);  // 需要的图片数量
-                    for (let i = 0; i < numImages; i++) {
-                        console.log(i)
-                        console.log(innerHeight * i)
-                        previewElement.scrollTo({ top: innerHeight * i })
-                        let canvas = await html2canvas(previewElement.parentElement, {
-                            width: width,
-                            height: height,
-                            useCORS: true
-                        })
-                        await saveCanvas(canvas,确定按钮.getAttribute("data-title") + i+ ".png")
-                    }
-                });
-            }, 500);
-        }
-
-    });
+    const 确定按钮 = 按钮元素数组[1]
     const previewElement = 导出对话框.element.querySelector("#preview");
     const exportBgLayer = 导出对话框.element.querySelector("#export-bglayer");
-
     const foldElement = (导出对话框.element.querySelector("#keepFold"));
     foldElement.addEventListener("change", () => {
         按钮元素数组[0].setAttribute("disabled", "disabled");
@@ -270,6 +114,9 @@ const 显示导出对话框=(protyle)=> {
         });
         按钮元素数组[0].removeAttribute("disabled");
         确定按钮.removeAttribute("disabled");
+        /**
+         * 这里是为了适配背景图插件
+         */
         let bgLayer = document.getElementById('bglayer');
         if (bgLayer) {
             previewElement.style.backgroundColor = 'transparent'
@@ -295,7 +142,168 @@ const 显示导出对话框=(protyle)=> {
         refreshPreview(response);
         确定按钮.setAttribute("data-title", response.data.name);
     });
+
+    取消按钮.addEventListener("click", () => {
+        导出对话框.destroy();
+    });
+    确定按钮.addEventListener("click", () => {
+        const 当前导出比例模式 = 导出比例选择器.value;
+        //按照分割线导出
+        if (当前导出比例模式 == '按分割线') {
+            setTimeout(async () => {
+                (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
+                addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas").then(async () => {
+                    //按照分割线导出
+                    previewElement.parentElement.style.maxHeight = ""
+                    let separatorElements = previewElement.querySelectorAll(':scope > .hr');
+                    if (separatorElements[0]) {
+                        previewElement.scrollTo({ top: 0 });
+                        previewElement.style.maxHeight = separatorElements[0].offsetTop - parseInt(getComputedStyle(previewElement).paddingBottom) + 'px'
+                        previewElement.style.height = separatorElements[0].offsetTop + 'px'
+                        let canvas = await html2canvas(previewElement.parentElement, {
+                            width: previewElement.parentElement.clientWidth,
+                            height: previewElement.parentElement.clientHeight,
+                            useCORS: true
+                        })
+                        await saveCanvas(canvas, 确定按钮.getAttribute("data-title") + 0 + ".png")
+                        for (let i = 0; i < separatorElements.length; i++) {
+                            const separator = separatorElements[i];
+                            const nextSeparator = separatorElements[i + 1];
+                            if (nextSeparator) {
+                                let h = nextSeparator.offsetTop - separator.offsetTop - separator.offsetHeight
+                                previewElement.style.height = h + 'px'
+
+                                previewElement.style.maxHeight = h + 'px'
+                            } else {
+                                let h = previewElement.scrollHeight - separator.offsetTop - separator.offsetHeight
+                                previewElement.style.height = h + 'px'
+                                previewElement.style.maxHeight = h + 'px'
+                            }
+                            separator.nextElementSibling.scrollIntoView()
+                            let canvas = await html2canvas(previewElement.parentElement, {
+                                width: previewElement.parentElement.clientWidth,
+                                height: previewElement.parentElement.clientHeight,
+                                useCORS: true
+                            })
+                            let file = await saveCanvas(canvas, 确定按钮.getAttribute("data-title") + i + 1 + ".png")
+                            openByMobile(file)
+
+                        }
+                    } else {
+                        previewElement.scrollTo({ top: 0 });
+                        previewElement.style.maxHeight = previewElement.scrollHeight + 'px'
+                        previewElement.style.height = previewElement.scrollHeight + 'px'
+                        let canvas = await html2canvas(previewElement.parentElement, {
+                            width: previewElement.parentElement.clientWidth,
+                            height: previewElement.parentElement.clientHeight,
+                            useCORS: true
+                        })
+                        let file = await saveCanvas(canvas, 确定按钮.getAttribute("data-title") + 0 + ".png")
+                        openByMobile(file)
+
+                    }
+                });
+            }, 500);
+        }
+        else if (当前导出比例模式 == '按大纲最高级') {
+            setTimeout(async () => {
+                (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
+                addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas").then(async () => {
+                    //按照分割线导出
+                    previewElement.parentElement.style.maxHeight = ""
+                    let selector = 'r'
+                    let separatorElements = []
+                    for (let i = 1; i < 6; i++) {
+                        selector = `:scope > [data-subtype="h${i}"]`
+                        if (previewElement.querySelectorAll(selector) && !separatorElements[0]) {
+                            separatorElements = previewElement.querySelectorAll(selector);
+                        }
+                    }
+                    if (separatorElements[0]) {
+                        previewElement.scrollTo({ top: 0 });
+                        previewElement.style.maxHeight = separatorElements[0].offsetTop - parseInt(getComputedStyle(previewElement).paddingBottom) + 'px'
+                        previewElement.style.height = separatorElements[0].offsetTop - parseInt(getComputedStyle(previewElement).paddingBottom) + 'px'
+                        let canvas = await html2canvas(previewElement.parentElement, {
+                            width: previewElement.parentElement.clientWidth,
+                            height: previewElement.parentElement.clientHeight,
+                            useCORS: true
+                        })
+                        await saveCanvas(canvas, 确定按钮.getAttribute("data-title") + 0 + ".png")
+                        for (let i = 0; i < separatorElements.length; i++) {
+                            const separator = separatorElements[i];
+                            const nextSeparator = separatorElements[i + 1];
+                            if (nextSeparator) {
+                                let h = nextSeparator.offsetTop - separator.offsetTop
+                                console.log(h, i)
+                                previewElement.style.height = h + 'px'
+                                previewElement.style.maxHeight = h + 'px'
+                            } else {
+                                let h = previewElement.scrollHeight - separator.offsetTop
+                                console.log(h, i)
+                                previewElement.style.height = h + 'px'
+                                previewElement.style.maxHeight = h + 'px'
+                            }
+                            separator.scrollIntoView()
+
+                            let canvas = await html2canvas(previewElement.parentElement, {
+                                width: previewElement.parentElement.clientWidth,
+                                height: previewElement.parentElement.clientHeight,
+                                useCORS: true
+                            })
+                            let file = await saveCanvas(canvas, 确定按钮.getAttribute("data-title") + i + 1 + ".png")
+                            openByMobile(file)
+                        }
+                    } else {
+                        previewElement.scrollTo({ top: 0 });
+                        previewElement.style.maxHeight = previewElement.scrollHeight + 'px'
+                        previewElement.style.height = previewElement.scrollHeight + 'px'
+                        let canvas = await html2canvas(previewElement.parentElement, {
+                            width: previewElement.parentElement.clientWidth,
+                            height: previewElement.parentElement.clientHeight,
+                            useCORS: true
+                        })
+                        let file = await saveCanvas(canvas, 确定按钮.getAttribute("data-title") + 0 + ".png")
+                        openByMobile(file)
+                    }
+                });
+            }, 500);
+        }
+        else if (当前导出比例模式.indexOf('/') > 0) {
+            //按照宽高比导出
+            const [widthRatio, heightRatio] = 当前导出比例模式.split("/");
+            const RatioValue = parseInt(heightRatio) / parseInt(widthRatio)
+            const width = previewElement.parentElement.clientWidth;
+            const height = width * RatioValue;
+            const innerWidth = previewElement.clientWidth
+            const innerHeight = Math.min(innerWidth * RatioValue, height - 60);
+            (导出对话框.element.querySelector(".b3-dialog__container")).style.height = "";
+            previewElement.parentElement.style.height = height + 'px'
+            previewElement.parentElement.style.maxHeight = height + 'px'
+            previewElement.style.height = innerHeight + 'px'
+            previewElement.style.maxHeight = innerHeight + 'px'
+            setTimeout(async () => {
+                addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas").then(async () => {
+                    //按照宽高比导出
+                    const totalHeight = previewElement.scrollHeight;  // HTML内容的总高度
+                    const numImages = Math.ceil(totalHeight / innerHeight);  // 需要的图片数量
+                    for (let i = 0; i < numImages; i++) {
+                        console.log(i)
+                        console.log(innerHeight * i)
+                        previewElement.scrollTo({ top: innerHeight * i })
+                        let canvas = await html2canvas(previewElement.parentElement, {
+                            width: width,
+                            height: height,
+                            useCORS: true
+                        })
+                        let file = await saveCanvas(canvas, 确定按钮.getAttribute("data-title") + i + ".png")
+                        openByMobile(file)
+                    }
+                });
+            }, 500);
+        }
+
+    });
 }
-plugin.eventBus.on('显示导出对话框',(e)=>{
+plugin.eventBus.on('显示导出对话框', (e) => {
     显示导出对话框(e.detail.protyle)
 })
