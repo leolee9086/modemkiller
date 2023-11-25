@@ -87,7 +87,6 @@ const 显示导出对话框=(protyle)=> {
                     //按照分割线导出
                     previewElement.parentElement.style.maxHeight = ""
                     let separatorElements = previewElement.querySelectorAll(':scope > .hr');
-                    console.log(separatorElements)
                     if (separatorElements[0]) {
                         previewElement.scrollTo({ top: 0 });
                         previewElement.style.maxHeight = separatorElements[0].offsetTop - parseInt(getComputedStyle(previewElement).paddingBottom) + 'px'
@@ -213,27 +212,8 @@ const 显示导出对话框=(protyle)=> {
                             height: previewElement.parentElement.clientHeight,
                             useCORS: true
                         })
-                        const blobPromise=canvasSaveBlobPromise(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
-                        /*const blobPromise = () => {
-                            return new Promise((resolve, reject) => {
-                                canvas.toBlob((blob) => {
-                                    try {
-                                        const formData = new FormData();
-                                        formData.append("file", blob, btnsElement[1].getAttribute("data-title") + 0 + ".png");
-                                        formData.append("type", "image/png");
-                                        fetchPost("/api/export/exportAsFile", formData, (response) => {
-                                            openByMobile(response.data.file);
-                                        });
-                                        resolve(true)
-                                    } catch (e) {
-                                        reject(e)
-                                    }
-                                })
-
-                            })
-
-                        }*/
-                        await blobPromise()
+                        await canvasSaveBlobPromise(canvas,btnsElement[1].getAttribute("data-title") + 0 + ".png")
+                       
 
                         for (let i = 0; i < separatorElements.length; i++) {
                             const separator = separatorElements[i];
@@ -256,27 +236,7 @@ const 显示导出对话框=(protyle)=> {
                                 height: previewElement.parentElement.clientHeight,
                                 useCORS: true
                             })
-                            const blobPromise = () => {
-                                return new Promise((resolve, reject) => {
-                                    canvas.toBlob((blob) => {
-                                        try {
-                                            const formData = new FormData();
-                                            formData.append("file", blob, btnsElement[1].getAttribute("data-title") + i + 1 + ".png");
-                                            formData.append("type", "image/png");
-                                            fetchPost("/api/export/exportAsFile", formData, (response) => {
-                                                openByMobile(response.data.file);
-                                            });
-                                            resolve(true)
-                                        } catch (e) {
-                                            reject(e)
-                                        }
-                                    })
-
-                                })
-
-                            }
-                            await blobPromise()
-
+                            await canvasSaveBlobPromise(canvas,btnsElement[1].getAttribute("data-title") + i + 1 + ".png")
                         }
                     } else {
                         previewElement.scrollTo({ top: 0 });
