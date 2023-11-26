@@ -4,7 +4,6 @@ window[Symbol.for(`clientApi`)] = clientApi
 
 class modemkiller extends Plugin {
     onload() {
-        console.log('保护猫猫，人人有责')
         this.注册导出图片菜单()
         this.加载异步模块()
     }
