@@ -10,9 +10,11 @@ class modemkiller extends Plugin {
     }
     注册导出图片菜单() {
         this.eventBus.on("click-editortitleicon", (e) => this.插入导出图片菜单(e));
+        this.eventBus.on("click-blockicon", (e) => this.插入导出图片菜单(e));
+
     }
     插入导出图片菜单(e) {
-        const { menu, protyle } = e.detail
+        const { menu } = e.detail
         menu.addItem({
             label: this.i18n.导出多图,
             click: async () => {
@@ -30,6 +32,9 @@ class modemkiller extends Plugin {
                 console.error(e)
             }
         }
+    }
+    onunload(){
+        window.location.reload()
     }
 }
 module.exports = modemkiller
