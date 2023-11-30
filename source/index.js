@@ -326,3 +326,80 @@ plugin.eventBus.on('显示导出对话框', (e) => {
         显示导出对话框([e.detail.protyle.block.id])
     }
 })
+
+async function copyAsPng(element) {
+    await addScript("/stage/protyle/js/html2canvas.min.js?v=1.4.1", "protyleHtml2canvas")
+    const canvas = await html2canvas(element);
+    return new Promise((resolve, reject) => {
+        canvas.toBlob(blob => {
+            resolve(blob);
+        }, 'image/png');
+    });
+}
+
+async function copyElementToClipboard(element, tempStyle) {
+    // Save the original style
+    const originalStyle = element.getAttribute('style');
+
+    // Set the temporary style
+    element.setAttribute('style', tempStyle);
+
+    // Temporarily remove the class
+    element.classList.remove('protyle-wysiwyg--select');
+
+    const blob = await copyAsPng(element);
+    const data = [new ClipboardItem({ 'image/png': blob })];
+    try {
+        await navigator.clipboard.write(data);
+        console.log('Image copied to clipboard');
+    } catch (error) {
+        console.error('Error: ', error);
+    }
+
+    // Reset the style to the original
+    element.setAttribute('style', originalStyle);
+
+    // Add the class back
+    element.classList.add('protyle-wysiwyg--select');
+}
+
+plugin.eventBus.on('复制到剪贴版',(e)=>{
+    let tempStyle=plugin.currentStyle.value||""
+    if (e.detail.blockElements) {
+        copyElementToClipboard(e.detail.blockElements[e.detail.blockElements.length - 1], tempStyle)
+    } else if (e.detail.protyle && e.detail.protyle.block.id) {
+        copyElementToClipboard(e.detail.protyle.element, tempStyle)
+    }
+})
+let styleSql = `select * from attributes where name = 'style' limit 102400`
+let styles = kernelApi.sql.sync({ stmt: styleSql })
+
+// Create a Set to store unique style values
+let uniqueStyles = new Set();
+
+styles = styles.filter(style => {
+    // Create a temporary element
+    let tempElement = document.createElement('div');
+
+    // Set the style string as the element's style
+    tempElement.style.cssText = style.value;
+
+    // Check if the style object only contains the width property
+    let keys = Object.keys(tempElement.style);
+    if (keys.length === 1 && keys[0] === 'width') {
+        return false;
+    }
+
+    // Check if the style value is unique
+    let styleValue = tempElement.style.cssText;
+    if (uniqueStyles.has(styleValue)) {
+        // If the style value is not unique, filter it out
+        return false;
+    } else {
+        // If the style value is unique, add it to the Set and keep it
+        uniqueStyles.add(styleValue);
+        return true;
+    }
+});
+
+plugin.styles = plugin.styles.concat(styles);
