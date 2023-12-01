@@ -343,6 +343,7 @@ async function copyElementToClipboard(element, tempStyle) {
 
     // Set the temporary style
     element.setAttribute('style', tempStyle);
+    const hasClass = element.classList.contains('protyle-wysiwyg--select');
 
     // Temporarily remove the class
     element.classList.remove('protyle-wysiwyg--select');
@@ -360,7 +361,7 @@ async function copyElementToClipboard(element, tempStyle) {
     element.setAttribute('style', originalStyle);
 
     // Add the class back
-    element.classList.add('protyle-wysiwyg--select');
+    hasClass?element.classList.add('protyle-wysiwyg--select'):null
 }
 
 plugin.eventBus.on('复制到剪贴版',(e)=>{

@@ -1,7 +1,6 @@
 const { Plugin } = require("siyuan");
 const clientApi = require("siyuan");
 window[Symbol.for(`clientApi`)] = clientApi
-
 class modemkiller extends Plugin {
     onload() {
         console.log('保护猫猫，人人有责')
