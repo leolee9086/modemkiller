@@ -33,7 +33,7 @@ class modemkiller extends Plugin {
                 submenu:this.styles.map(
                     style=>{
                         return {
-                            label:`<span style="${style.value};max-width:400px !important;display:block">${this.i18n.复制为图片}=>使用来自块${style.block_id}的样式</span>`,
+                            label:`<span style="${style.value};max-width:400px !important;display:block;max-height:3rem !important">${this.i18n.复制为图片}=>使用来自块${style.block_id}的样式</span>`,
                             click: async () => {
                                 this.currentStyle= style
                                 await this.加载异步模块()

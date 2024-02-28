@@ -52,6 +52,7 @@ export const template=()=> `
     <option value="1/1">1:1</option>
     <option value="按分割线">${plugin.i18n.使用分割线}</option>
     <option value="按大纲最高级">${plugin.i18n.按大纲最高级}</option>
+    <option value="小红书模式">${plugin.i18n.小红书模式}</option>
 
 </select>
 
